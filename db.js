@@ -1,27 +1,25 @@
-// *** YAHAN TABDEELI KI GAYI HAI: 'mysql2/promise' istemal kiya gaya hai ***
 const mysql = require('mysql2/promise');
 
-// *** YAHAN TABDEELI KI GAYI HAI: createConnection ki jagah createPool istemal kiya gaya hai ***
-// createPool behtar performance deta hai
+// createPool ab connection details environment variables se lega
+// Yeh Hostinger par aur aapke local computer, dono par kaam karega
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'smart_inventory',
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'smart_inventory',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
-// Test karne ke liye ke connection theek hai ya nahi
+// Test the connection
 pool.getConnection()
     .then(connection => {
-        console.log('Successfully connected to the database: smart_inventory!');
-        connection.release(); // Connection ko foran wapas pool mein bhej den
+        console.log('Successfully connected to the database!');
+        connection.release();
     })
     .catch(error => {
-        console.error('Database se connect hone mein masla aa raha hai: ', error);
+        console.error('Database connection failed: ', error);
     });
 
-// Pool ko doosri files mein istemal karne ke liye export karen
 module.exports = pool;

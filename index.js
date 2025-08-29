@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config(); // Yeh line zaroori hai .env file ko parhne ke liye
 
 // Controllers se tamam functions ko import karein
 const { 
